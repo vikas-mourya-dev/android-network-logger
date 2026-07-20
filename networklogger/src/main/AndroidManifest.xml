@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name=".ui.NetworkLogActivity"
+            android:exported="false"
+            android:label="Network Logs" />
+
+        <activity
+            android:name=".ui.NetworkLogDetailActivity"
+            android:exported="false"
+            android:label="Log Detail" />
+    </application>
+
+</manifest>

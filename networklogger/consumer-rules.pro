@@ -1,0 +1,3 @@
+-keep class com.vbm.logger.data.entity.** { *; }
+-keep class com.vbm.logger.NetworkLogger { *; }
+-dontwarn okhttp3.**
