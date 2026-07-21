@@ -5,7 +5,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import com.vbm.logger.callback.NetworkLogCallback;
 import com.vbm.logger.config.LoggerConfig;
+import com.vbm.logger.data.NetworkLogSortOrder;
 import com.vbm.logger.data.db.NetworkLogDatabase;
 import com.vbm.logger.data.entity.NetworkLogEntity;
 import com.vbm.logger.data.repository.NetworkLogRepository;
@@ -75,15 +77,28 @@ public final class NetworkLogger {
                 .build());
     }
 
+    /** All logs, most recent first. */
     public LiveData<List<NetworkLogEntity>> getLogs() {
         return repository.getAllLogs();
     }
 
-    public void clearLogs() {
-        repository.clearAll();
+    /** All logs in the given order — see {@link NetworkLogSortOrder}. */
+    public LiveData<List<NetworkLogEntity>> getLogs(NetworkLogSortOrder sortOrder) {
+        return repository.getLogs(sortOrder);
     }
 
-    public void getLogById(long id, NetworkLogRepository.LogCallback callback) {
+    /** Looks up a single log by id; {@code callback} is invoked on the main thread with {@code null} if not found. */
+    public void getLogById(long id, NetworkLogCallback callback) {
         repository.getLogById(id, callback);
+    }
+
+    /** Deletes a single log entry. */
+    public void deleteLogById(long id) {
+        repository.deleteById(id);
+    }
+
+    /** Deletes every stored log. */
+    public void clearLogs() {
+        repository.clearAll();
     }
 }

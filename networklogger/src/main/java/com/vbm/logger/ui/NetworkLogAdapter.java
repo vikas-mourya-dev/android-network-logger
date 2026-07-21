@@ -21,11 +21,17 @@ class NetworkLogAdapter extends ListAdapter<NetworkLogEntity, NetworkLogAdapter.
         void onLogClick(NetworkLogEntity entity);
     }
 
-    private final OnLogClickListener listener;
+    interface OnLogLongClickListener {
+        void onLogLongClick(NetworkLogEntity entity);
+    }
 
-    NetworkLogAdapter(OnLogClickListener listener) {
+    private final OnLogClickListener listener;
+    private final OnLogLongClickListener longClickListener;
+
+    NetworkLogAdapter(OnLogClickListener listener, OnLogLongClickListener longClickListener) {
         super(DIFF_CALLBACK);
         this.listener = listener;
+        this.longClickListener = longClickListener;
     }
 
     private static final DiffUtil.ItemCallback<NetworkLogEntity> DIFF_CALLBACK =
@@ -52,7 +58,7 @@ class NetworkLogAdapter extends ListAdapter<NetworkLogEntity, NetworkLogAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull LogViewHolder holder, int position) {
-        holder.bind(getItem(position), listener);
+        holder.bind(getItem(position), listener, longClickListener);
     }
 
     static class LogViewHolder extends RecyclerView.ViewHolder {
@@ -65,15 +71,20 @@ class NetworkLogAdapter extends ListAdapter<NetworkLogEntity, NetworkLogAdapter.
             statusAndLatency = itemView.findViewById(R.id.text_status_latency);
         }
 
-        void bind(NetworkLogEntity entity, OnLogClickListener listener) {
+        void bind(NetworkLogEntity entity, OnLogClickListener listener, OnLogLongClickListener longClickListener) {
             methodAndUrl.setText(String.format(Locale.US, "%s  %s", entity.getMethod(), entity.getUrl()));
 
             String status = entity.getErrorMessage() != null
                     ? "ERROR: " + entity.getErrorMessage()
                     : String.valueOf(entity.getStatusCode());
-            statusAndLatency.setText(String.format(Locale.US, "%s · %dms", status, entity.getLatencyMs()));
+            statusAndLatency.setText(String.format(Locale.US, "%s · %dms · %s",
+                    status, entity.getLatencyMs(), entity.getFormattedRequestTime()));
 
             itemView.setOnClickListener(v -> listener.onLogClick(entity));
+            itemView.setOnLongClickListener(v -> {
+                longClickListener.onLogLongClick(entity);
+                return true;
+            });
         }
     }
 }

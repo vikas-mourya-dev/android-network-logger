@@ -4,6 +4,8 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import com.vbm.logger.callback.NetworkLogCallback;
+import com.vbm.logger.data.NetworkLogSortOrder;
 import com.vbm.logger.data.dao.NetworkLogDao;
 import com.vbm.logger.data.entity.NetworkLogEntity;
 import com.vbm.logger.util.AppExecutors;
@@ -54,7 +56,24 @@ public class NetworkLogRepositoryImpl implements NetworkLogRepository {
     }
 
     @Override
-    public void getLogById(long id, LogCallback callback) {
+    public LiveData<List<NetworkLogEntity>> getLogs(NetworkLogSortOrder sortOrder) {
+        switch (sortOrder) {
+            case TIME_ASC:
+                return dao.getAllLogsByTimeAsc();
+            case LATENCY_DESC:
+                return dao.getAllLogsByLatencyDesc();
+            case LATENCY_ASC:
+                return dao.getAllLogsByLatencyAsc();
+            case STATUS_CODE:
+                return dao.getAllLogsByStatusCode();
+            case TIME_DESC:
+            default:
+                return dao.getAllLogsByTimeDesc();
+        }
+    }
+
+    @Override
+    public void getLogById(long id, NetworkLogCallback callback) {
         executors.diskIO().execute(() -> {
             NetworkLogEntity entity = null;
             try {
@@ -63,7 +82,7 @@ public class NetworkLogRepositoryImpl implements NetworkLogRepository {
                 Log.w(TAG, "Failed to load network log", e);
             }
             NetworkLogEntity result = entity;
-            executors.mainThread().execute(() -> callback.onLoaded(result));
+            executors.mainThread().execute(() -> callback.onResult(result));
         });
     }
 

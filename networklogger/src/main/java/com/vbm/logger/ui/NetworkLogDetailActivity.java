@@ -43,8 +43,10 @@ public class NetworkLogDetailActivity extends AppCompatActivity {
     private String formatDetail(NetworkLogEntity entity) {
         StringBuilder sb = new StringBuilder();
         sb.append(entity.getMethod()).append(' ').append(entity.getUrl()).append("\n\n");
-        sb.append(String.format(Locale.US, "Status: %d    Latency: %dms\n\n",
+        sb.append(String.format(Locale.US, "Status: %d    Latency: %dms\n",
                 entity.getStatusCode(), entity.getLatencyMs()));
+        sb.append("Requested: ").append(entity.getFormattedRequestTime()).append('\n');
+        sb.append("Responded: ").append(entity.getFormattedResponseTime()).append("\n\n");
 
         if (entity.getErrorMessage() != null) {
             sb.append("Error: ").append(entity.getErrorMessage()).append("\n\n");

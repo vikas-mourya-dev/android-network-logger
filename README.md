@@ -24,7 +24,8 @@ dependencyResolutionManagement {
 Then add the dependency:
 
 ```groovy
-implementation 'com.github.vbm:networklogger:1.0.0'
+implementation 'com.github.vikas-mourya-dev:android-network-logger:v1.1.0'
+implementation 'com.squareup.okhttp3:okhttp:4.12.0'  // networklogger declares this compileOnly
 ```
 
 ## Setup
@@ -48,15 +49,42 @@ OkHttpClient client = new OkHttpClient.Builder()
         .build();
 ```
 
-## Reading logs
+## Repository API
+
+Everything a consuming app needs goes through the `NetworkLogger` facade — you never touch
+Room/DAO types directly.
 
 ```java
-NetworkLogger.getInstance().getLogs();   // LiveData<List<NetworkLogEntity>>
-NetworkLogger.getInstance().clearLogs();
+// All logs, most recent first
+LiveData<List<NetworkLogEntity>> logs = NetworkLogger.getInstance().getLogs();
+
+// Fetch and sort
+LiveData<List<NetworkLogEntity>> byLatency =
+        NetworkLogger.getInstance().getLogs(NetworkLogSortOrder.LATENCY_DESC);
+```
+
+Available `NetworkLogSortOrder` values: `TIME_DESC` (default), `TIME_ASC`, `LATENCY_DESC`,
+`LATENCY_ASC`, `STATUS_CODE`.
+
+```java
+// Look up a single log
+NetworkLogger.getInstance().getLogById(id, entity -> {
+    // called on the main thread; entity is null if not found
+});
+
+// Delete
+NetworkLogger.getInstance().deleteLogById(id);   // one record
+NetworkLogger.getInstance().clearLogs();         // everything
+
+// Toggle at runtime
 NetworkLogger.getInstance().setEnabled(false);
 ```
 
-Or launch the built-in viewer:
+Each `NetworkLogEntity` exposes `getRequestTimestamp()`/`getResponseTimestamp()` as raw epoch
+millis, plus `getFormattedRequestTime()`/`getFormattedResponseTime()` which render them in the
+**host device's local timezone** (not GMT) — safe to show directly in UI.
+
+Or launch the built-in viewer instead of building your own screen:
 
 ```java
 startActivity(NetworkLogActivity.newIntent(context));
