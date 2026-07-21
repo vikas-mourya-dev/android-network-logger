@@ -44,6 +44,14 @@
         android:layout_marginBottom="8dp"
         android:text="Open Log Viewer" />
 
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_debug_bubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="8dp"
+        android:text="Show debug bubble" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_logs"
         android:layout_width="match_parent"

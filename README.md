@@ -90,6 +90,31 @@ Or launch the built-in viewer instead of building your own screen:
 startActivity(NetworkLogActivity.newIntent(context));
 ```
 
+## Debug bubble
+
+A draggable in-app bubble (Start/Stop Logging, View Logs, Clear Logs) that you can turn on/off
+at runtime — handy so you only capture traffic while actively debugging, instead of logging
+everything for the life of the app. It's rendered inside your own activities' content view, not
+a system overlay: no `SYSTEM_ALERT_WINDOW` permission, no foreground service, and it can never
+show over other apps.
+
+```java
+NetworkLogger.getInstance().showFloatingBubble();   // attach to every activity of this app
+NetworkLogger.getInstance().hideFloatingBubble();
+NetworkLogger.getInstance().isFloatingBubbleVisible();
+```
+
+Or show it automatically from `init()`:
+
+```java
+LoggerConfig config = new LoggerConfig.Builder()
+        .setFloatingBubbleEnabled(true)
+        .build();
+```
+
+Drag it anywhere on screen; tap it (without dragging) to open the action menu. Its color reflects
+whether logging is currently enabled (teal) or stopped (grey).
+
 ## Config options
 
 | Option | Default | Description |
@@ -99,6 +124,7 @@ startActivity(NetworkLogActivity.newIntent(context));
 | `setMaxLogCount` | `500` | Oldest logs beyond this count are pruned after each insert |
 | `setLogBodyMaxLength` | `10000` | Request/response bodies are truncated past this many characters |
 | `setRedactedHeaders` | none | Header names replaced with `[redacted]` in stored logs |
+| `setFloatingBubbleEnabled` | `false` | Shows the draggable debug bubble as soon as `init()` runs |
 
 ## Design notes
 

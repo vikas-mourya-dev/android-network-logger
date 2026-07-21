@@ -15,6 +15,7 @@ public final class LoggerConfig {
     private final int maxLogCount;
     private final int logBodyMaxLength;
     private final Set<String> redactedHeaders;
+    private final boolean floatingBubbleEnabled;
 
     private LoggerConfig(Builder builder) {
         this.loggingEnabled = builder.loggingEnabled;
@@ -22,6 +23,7 @@ public final class LoggerConfig {
         this.maxLogCount = builder.maxLogCount;
         this.logBodyMaxLength = builder.logBodyMaxLength;
         this.redactedHeaders = Collections.unmodifiableSet(new HashSet<>(builder.redactedHeaders));
+        this.floatingBubbleEnabled = builder.floatingBubbleEnabled;
     }
 
     public boolean isLoggingEnabled() {
@@ -44,6 +46,11 @@ public final class LoggerConfig {
         return redactedHeaders;
     }
 
+    /** Whether the draggable in-app debug bubble should be shown automatically after {@code init()}. */
+    public boolean isFloatingBubbleEnabled() {
+        return floatingBubbleEnabled;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -54,6 +61,7 @@ public final class LoggerConfig {
         private int maxLogCount = 500;
         private int logBodyMaxLength = 10_000;
         private final Set<String> redactedHeaders = new HashSet<>();
+        private boolean floatingBubbleEnabled = false;
 
         public Builder setLoggingEnabled(boolean loggingEnabled) {
             this.loggingEnabled = loggingEnabled;
@@ -80,6 +88,12 @@ public final class LoggerConfig {
             for (String header : headers) {
                 this.redactedHeaders.add(header.toLowerCase());
             }
+            return this;
+        }
+
+        /** Shows a draggable in-app debug bubble (Start/Stop Logging, View Logs, Clear Logs) as soon as init() runs. */
+        public Builder setFloatingBubbleEnabled(boolean floatingBubbleEnabled) {
+            this.floatingBubbleEnabled = floatingBubbleEnabled;
             return this;
         }
 
