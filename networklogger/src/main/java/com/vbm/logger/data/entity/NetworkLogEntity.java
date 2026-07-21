@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.vbm.logger.util.TimeFormatter;
+
 @Entity(tableName = "network_logs")
 public class NetworkLogEntity {
 
@@ -118,6 +120,16 @@ public class NetworkLogEntity {
 
     public void setResponseTimestamp(long responseTimestamp) {
         this.responseTimestamp = responseTimestamp;
+    }
+
+    /** {@link #getRequestTimestamp()} formatted in the host device's local timezone. */
+    public String getFormattedRequestTime() {
+        return TimeFormatter.format(requestTimestamp);
+    }
+
+    /** {@link #getResponseTimestamp()} formatted in the host device's local timezone. */
+    public String getFormattedResponseTime() {
+        return TimeFormatter.format(responseTimestamp);
     }
 
     public String getErrorMessage() {

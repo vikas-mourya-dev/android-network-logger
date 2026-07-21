@@ -1,0 +1,29 @@
+<resources>
+    <color name="nl_primary">#3949AB</color>
+    <color name="nl_primary_dark">#26308F</color>
+    <color name="nl_accent">#00BFA5</color>
+
+    <color name="nl_background">#F4F5F9</color>
+    <color name="nl_surface">#FFFFFF</color>
+    <color name="nl_text_primary">#1C1F2A</color>
+    <color name="nl_text_secondary">#6B7280</color>
+    <color name="nl_divider">#E5E7EB</color>
+
+    <!-- HTTP method badges -->
+    <color name="nl_method_get">#1E88E5</color>
+    <color name="nl_method_post">#43A047</color>
+    <color name="nl_method_put">#FB8C00</color>
+    <color name="nl_method_patch">#8E24AA</color>
+    <color name="nl_method_delete">#E53935</color>
+    <color name="nl_method_default">#607D8B</color>
+
+    <!-- Status code badges -->
+    <color name="nl_status_2xx">#2E7D32</color>
+    <color name="nl_status_3xx">#F9A825</color>
+    <color name="nl_status_4xx">#EF6C00</color>
+    <color name="nl_status_5xx">#C62828</color>
+    <color name="nl_status_error">#8E0000</color>
+    <color name="nl_status_default">#757575</color>
+
+    <color name="nl_delete_action">#E53935</color>
+</resources>

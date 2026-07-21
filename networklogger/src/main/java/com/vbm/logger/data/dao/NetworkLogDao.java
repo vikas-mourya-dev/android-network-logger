@@ -18,6 +18,21 @@ public interface NetworkLogDao {
     @Query("SELECT * FROM network_logs ORDER BY requestTimestamp DESC")
     LiveData<List<NetworkLogEntity>> getAllLogs();
 
+    @Query("SELECT * FROM network_logs ORDER BY requestTimestamp DESC")
+    LiveData<List<NetworkLogEntity>> getAllLogsByTimeDesc();
+
+    @Query("SELECT * FROM network_logs ORDER BY requestTimestamp ASC")
+    LiveData<List<NetworkLogEntity>> getAllLogsByTimeAsc();
+
+    @Query("SELECT * FROM network_logs ORDER BY latencyMs DESC")
+    LiveData<List<NetworkLogEntity>> getAllLogsByLatencyDesc();
+
+    @Query("SELECT * FROM network_logs ORDER BY latencyMs ASC")
+    LiveData<List<NetworkLogEntity>> getAllLogsByLatencyAsc();
+
+    @Query("SELECT * FROM network_logs ORDER BY statusCode ASC")
+    LiveData<List<NetworkLogEntity>> getAllLogsByStatusCode();
+
     @Query("SELECT * FROM network_logs WHERE id = :id")
     NetworkLogEntity getLogById(long id);
 

@@ -1,0 +1,19 @@
+<resources>
+    <!-- Self-contained theme so the library's own screens render correctly
+         regardless of the host app's theme. -->
+    <style name="Theme.NetworkLogger" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/nl_primary</item>
+        <item name="colorPrimaryDark">@color/nl_primary_dark</item>
+        <item name="colorAccent">@color/nl_accent</item>
+        <item name="android:windowBackground">@color/nl_background</item>
+    </style>
+
+    <style name="NetworkLogger.DetailCard" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="cardCornerRadius">10dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="cardBackgroundColor">@color/nl_surface</item>
+    </style>
+</resources>

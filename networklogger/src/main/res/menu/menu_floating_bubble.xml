@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_start_logging"
+        android:title="Start Logging" />
+    <item
+        android:id="@+id/action_stop_logging"
+        android:title="Stop Logging" />
+    <item
+        android:id="@+id/action_view_logs"
+        android:title="View Logs" />
+    <item
+        android:id="@+id/action_clear_logs"
+        android:title="Clear Logs" />
+</menu>

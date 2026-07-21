@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.vbm.logger.NetworkLogger;
 import com.vbm.logger.sample.api.ApiClient;
 import com.vbm.logger.sample.api.JsonPlaceholderApi;
 import com.vbm.logger.ui.NetworkLogActivity;
@@ -40,11 +42,21 @@ public class MainActivity extends AppCompatActivity {
         MaterialButton postButton = findViewById(R.id.button_post);
         MaterialButton failButton = findViewById(R.id.button_fail);
         MaterialButton viewLogsButton = findViewById(R.id.button_view_logs);
+        SwitchMaterial bubbleSwitch = findViewById(R.id.switch_debug_bubble);
 
         getButton.setOnClickListener(v -> performGet());
         postButton.setOnClickListener(v -> performPost());
         failButton.setOnClickListener(v -> performFailingCall());
         viewLogsButton.setOnClickListener(v -> startActivity(NetworkLogActivity.newIntent(this)));
+
+        bubbleSwitch.setChecked(NetworkLogger.getInstance().isFloatingBubbleVisible());
+        bubbleSwitch.setOnCheckedChangeListener((button, checked) -> {
+            if (checked) {
+                NetworkLogger.getInstance().showFloatingBubble();
+            } else {
+                NetworkLogger.getInstance().hideFloatingBubble();
+            }
+        });
     }
 
     private void performGet() {

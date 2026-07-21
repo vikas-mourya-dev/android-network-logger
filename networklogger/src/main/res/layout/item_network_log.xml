@@ -1,29 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="10dp"
-    android:background="?android:attr/selectableItemBackground"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="5dp"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/nl_surface"
+    app:rippleColor="@color/nl_divider">
 
-    <TextView
-        android:id="@+id/text_method_url"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:maxLines="2"
-        android:ellipsize="middle"
-        android:textSize="14sp" />
+        android:orientation="vertical"
+        android:padding="12dp">
 
-    <TextView
-        android:id="@+id/text_status_latency"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:textSize="12sp"
-        android:alpha="0.7" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/text_sr_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/nl_text_secondary"
+                android:textSize="12sp"
+                tools:text="#1" />
+
+            <TextView
+                android:id="@+id/badge_method"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_badge_pill"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:textColor="@android:color/white"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                tools:text="GET" />
+
+            <TextView
+                android:id="@+id/badge_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_badge_pill"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:textColor="@android:color/white"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                tools:text="200" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/text_latency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:textColor="@color/nl_text_secondary"
+                android:textSize="12sp"
+                tools:text="427ms" />
+
+            <ImageButton
+                android:id="@+id/button_delete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Delete log"
+                android:padding="6dp"
+                android:src="@drawable/ic_delete_24"
+                app:tint="@color/nl_delete_action" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:ellipsize="middle"
+            android:maxLines="2"
+            android:textColor="@color/nl_text_primary"
+            android:textSize="14sp"
+            tools:text="https://jsonplaceholder.typicode.com/posts/1" />
+
+        <TextView
+            android:id="@+id/text_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/nl_text_secondary"
+            android:textSize="11sp"
+            tools:text="2026-07-21 19:58:14.715" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
