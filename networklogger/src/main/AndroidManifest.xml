@@ -4,12 +4,14 @@
         <activity
             android:name=".ui.NetworkLogActivity"
             android:exported="false"
-            android:label="Network Logs" />
+            android:label="Network Logs"
+            android:theme="@style/Theme.NetworkLogger" />
 
         <activity
             android:name=".ui.NetworkLogDetailActivity"
             android:exported="false"
-            android:label="Log Detail" />
+            android:label="Log Detail"
+            android:theme="@style/Theme.NetworkLogger" />
     </application>
 
 </manifest>
