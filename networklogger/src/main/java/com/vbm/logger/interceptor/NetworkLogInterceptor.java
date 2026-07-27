@@ -114,6 +114,14 @@ public class NetworkLogInterceptor implements okhttp3.Interceptor {
         if (isBinary(body.contentType())) {
             return "[binary body, " + humanReadableBytes(body.contentLength()) + "]";
         }
+        if (body.isOneShot()) {
+            // writeTo() would otherwise be called twice (once here to log it, once by
+            // chain.proceed() to actually send it) — fine for buffer-backed bodies, but a
+            // one-shot/streaming body (e.g. backed by an InputStream) can throw or send a
+            // corrupt/empty payload the second time. Skip logging its content rather than risk
+            // breaking a real upload.
+            return "[one-shot/streaming body skipped, " + humanReadableBytes(body.contentLength()) + "]";
+        }
 
         Buffer buffer = new Buffer();
         body.writeTo(buffer);

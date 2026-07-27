@@ -171,6 +171,17 @@ menu — Start Logging / Stop Logging (whichever matches the current state is di
 Logs, Clear Logs. Its color reflects whether logging is currently on (teal) or stopped (grey),
 updating live as you toggle it.
 
+**Excluding specific activities:** if your app hosts a third-party SDK screen whose theme doesn't
+extend AppCompat/MaterialComponents, the bubble already inflates its own menu/dialog against a
+bundled MaterialComponents theme so it won't crash there — but you can still opt any activity out
+entirely:
+
+```java
+LoggerConfig config = new LoggerConfig.Builder()
+        .setExcludedActivityClasses(PaymentSdkActivity.class, OtherSdkActivity.class)
+        .build();
+```
+
 ## Config options
 
 | Option | Default | Description |
@@ -181,11 +192,15 @@ updating live as you toggle it.
 | `setLogBodyMaxLength` | `10000` | Request/response bodies are truncated past this many characters |
 | `setRedactedHeaders` | none | Header names replaced with `[redacted]` in stored logs |
 | `setFloatingBubbleEnabled` | `false` | Shows the draggable debug bubble as soon as `init()` runs |
+| `setExcludedActivityClasses` | none | Activities the debug bubble never attaches to |
 
 ## Design notes
 
 - The interceptor uses `response.peekBody()` rather than consuming the response, so the host
   app's own Retrofit/OkHttp call always receives an untouched body.
+- Request bodies marked `isOneShot()` (streaming uploads, single-use sources) are never buffered
+  for logging — doing so would read them twice and could corrupt or break the real upload. These
+  show up as `[one-shot/streaming body skipped]` instead of their content.
 - All database writes go through a dedicated single-thread executor — the interceptor never
   blocks the network thread on disk I/O.
 - Every internal operation (body parsing, DB writes) is wrapped in try/catch: a bug in this

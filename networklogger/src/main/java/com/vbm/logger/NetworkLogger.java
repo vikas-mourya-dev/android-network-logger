@@ -58,14 +58,20 @@ public final class NetworkLogger {
      * Uses applicationContext internally to avoid leaking the caller's context.
      */
     public static void init(@NonNull Context context, @NonNull LoggerConfig config) {
-        if (instance == null) {
-            synchronized (NetworkLogger.class) {
-                if (instance == null) {
-                    instance = new NetworkLogger(context.getApplicationContext(), config);
-                    if (config.isFloatingBubbleEnabled()) {
-                        instance.showFloatingBubble();
-                    }
-                }
+        if (instance != null) {
+            Log.w(TAG, "init() called more than once; ignoring this call and keeping the existing "
+                    + "configuration. Use setEnabled()/other runtime setters to change behavior after init().");
+            return;
+        }
+        synchronized (NetworkLogger.class) {
+            if (instance != null) {
+                Log.w(TAG, "init() called more than once; ignoring this call and keeping the existing "
+                        + "configuration. Use setEnabled()/other runtime setters to change behavior after init().");
+                return;
+            }
+            instance = new NetworkLogger(context.getApplicationContext(), config);
+            if (config.isFloatingBubbleEnabled()) {
+                instance.showFloatingBubble();
             }
         }
     }
@@ -83,14 +89,14 @@ public final class NetworkLogger {
     }
 
     public void setEnabled(boolean enabled) {
-        LoggerConfig current = configRef.get();
-        configRef.set(LoggerConfig.builder()
+        configRef.updateAndGet(current -> LoggerConfig.builder()
                 .setLoggingEnabled(enabled)
                 .setDatabaseStorageEnabled(current.isDatabaseStorageEnabled())
                 .setMaxLogCount(current.getMaxLogCount())
                 .setLogBodyMaxLength(current.getLogBodyMaxLength())
                 .setRedactedHeaders(current.getRedactedHeaders().toArray(new String[0]))
                 .setFloatingBubbleEnabled(current.isFloatingBubbleEnabled())
+                .setExcludedActivityClasses(current.getExcludedActivityClasses().toArray(new Class<?>[0]))
                 .build());
     }
 
@@ -120,6 +126,11 @@ public final class NetworkLogger {
 
     public boolean isFloatingBubbleVisible() {
         return FloatingBubbleManager.isEnabled();
+    }
+
+    /** Whether the debug bubble is configured to never attach to this activity class. */
+    public boolean isActivityExcludedFromBubble(Class<?> activityClass) {
+        return configRef.get().getExcludedActivityClasses().contains(activityClass);
     }
 
     /** All logs, most recent first. */
