@@ -1,9 +1,0 @@
-R_DEF: Internal format may change without notice
-local
-id button_fail
-id button_get
-id button_post
-id button_view_logs
-id recycler_logs
-layout activity_main
-style Theme.NetworkLoggerSample

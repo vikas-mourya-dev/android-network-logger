@@ -1,9 +1,0 @@
-com.vbm.logger
-id recycler_network_logs
-id text_log_detail
-id text_method_url
-id text_status_latency
-layout activity_network_log
-layout activity_network_log_detail
-layout item_network_log
-string network_logger_log_not_found

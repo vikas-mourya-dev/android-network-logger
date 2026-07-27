@@ -1,9 +1,0 @@
-com.vbm.logger.networklogger-pngs-0 C:\default-studio\project\dependency\logging\networklogger\build\generated\res\pngs\debug
-com.vbm.logger.networklogger-updated_navigation_xml-1 C:\default-studio\project\dependency\logging\networklogger\build\generated\updated_navigation_xml\debug
-com.vbm.logger.networklogger-mergeDebugResources-2 C:\default-studio\project\dependency\logging\networklogger\build\intermediates\incremental\debug\mergeDebugResources\merged.dir
-com.vbm.logger.networklogger-mergeDebugResources-3 C:\default-studio\project\dependency\logging\networklogger\build\intermediates\incremental\debug\mergeDebugResources\stripped.dir
-com.vbm.logger.networklogger-debug-4 C:\default-studio\project\dependency\logging\networklogger\build\intermediates\merged_res\debug\mergeDebugResources
-com.vbm.logger.networklogger-debug-5 C:\default-studio\project\dependency\logging\networklogger\build\intermediates\packaged_res\debug\packageDebugResources
-com.vbm.logger.networklogger-debug-6 C:\default-studio\project\dependency\logging\networklogger\src\debug\res
-com.vbm.logger.networklogger-main-7 C:\default-studio\project\dependency\logging\networklogger\src\main\res
-gradleHome-0 C:\Users\LENOVO\.gradle

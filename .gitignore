@@ -1,0 +1,16 @@
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build/
+/captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+
+**/build/
+
+# Keep the Gradle wrapper jar (needed to run ./gradlew without a system Gradle install)
+!gradle/wrapper/gradle-wrapper.jar
