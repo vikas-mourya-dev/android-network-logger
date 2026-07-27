@@ -2,7 +2,9 @@ package com.vbm.logger.floating;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.res.ColorStateList;
+import android.view.ContextThemeWrapper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -17,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import com.vbm.logger.NetworkLogger;
 import com.vbm.logger.R;
 import com.vbm.logger.ui.NetworkLogActivity;
+import com.vbm.logger.ui.NetworkLogDetailActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
@@ -82,6 +85,17 @@ public final class FloatingBubbleManager {
             }
 
             @Override
+            public void onActivityResumed(Activity activity) {
+                // Some overlay/SDK activities pause/resume the activity underneath without
+                // stopping/starting it, which would otherwise leave currentActivityRef pointed at
+                // a finished screen. attach() is a no-op if this activity already has a bubble.
+                currentActivityRef = new WeakReference<>(activity);
+                if (enabled) {
+                    attach(activity);
+                }
+            }
+
+            @Override
             public void onActivityStopped(Activity activity) {
                 detach(activity);
             }
@@ -94,7 +108,9 @@ public final class FloatingBubbleManager {
 
     private static void attach(Activity activity) {
         if (activity == null || activeBubbles.containsKey(activity)
-                || activity instanceof NetworkLogActivity) {
+                || activity instanceof NetworkLogActivity
+                || activity instanceof NetworkLogDetailActivity
+                || NetworkLogger.getInstance().isActivityExcludedFromBubble(activity.getClass())) {
             return;
         }
 
@@ -146,7 +162,12 @@ public final class FloatingBubbleManager {
     }
 
     private static void showMenu(Activity activity, ImageView bubble) {
-        PopupMenu popupMenu = new PopupMenu(activity, bubble);
+        // Wrapped so the popup/dialog always inflate against a MaterialComponents theme, even if
+        // the host activity's own theme doesn't extend AppCompat/MaterialComponents (e.g. a
+        // third-party SDK screen on Theme.DeviceDefault) — otherwise inflation throws here.
+        Context themedContext = new ContextThemeWrapper(activity, R.style.Theme_NetworkLogger);
+
+        PopupMenu popupMenu = new PopupMenu(themedContext, bubble);
         popupMenu.getMenuInflater().inflate(R.menu.menu_floating_bubble, popupMenu.getMenu());
 
         boolean loggingEnabled = NetworkLogger.getInstance().isLoggingEnabled();
@@ -170,7 +191,7 @@ public final class FloatingBubbleManager {
                 return true;
             }
             if (id == R.id.action_clear_logs) {
-                new AlertDialog.Builder(activity)
+                new AlertDialog.Builder(themedContext)
                         .setTitle("Delete all logs?")
                         .setMessage("This action cannot be undone.")
                         .setPositiveButton("Delete", (dialog, which) -> NetworkLogger.getInstance().clearLogs())

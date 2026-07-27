@@ -1,5 +1,6 @@
 package com.vbm.logger.config;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +17,7 @@ public final class LoggerConfig {
     private final int logBodyMaxLength;
     private final Set<String> redactedHeaders;
     private final boolean floatingBubbleEnabled;
+    private final Set<Class<?>> excludedActivityClasses;
 
     private LoggerConfig(Builder builder) {
         this.loggingEnabled = builder.loggingEnabled;
@@ -24,6 +26,7 @@ public final class LoggerConfig {
         this.logBodyMaxLength = builder.logBodyMaxLength;
         this.redactedHeaders = Collections.unmodifiableSet(new HashSet<>(builder.redactedHeaders));
         this.floatingBubbleEnabled = builder.floatingBubbleEnabled;
+        this.excludedActivityClasses = Collections.unmodifiableSet(new HashSet<>(builder.excludedActivityClasses));
     }
 
     public boolean isLoggingEnabled() {
@@ -51,6 +54,11 @@ public final class LoggerConfig {
         return floatingBubbleEnabled;
     }
 
+    /** Activity classes the debug bubble is never attached to (e.g. a third-party SDK screen). */
+    public Set<Class<?>> getExcludedActivityClasses() {
+        return excludedActivityClasses;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -62,6 +70,7 @@ public final class LoggerConfig {
         private int logBodyMaxLength = 10_000;
         private final Set<String> redactedHeaders = new HashSet<>();
         private boolean floatingBubbleEnabled = false;
+        private Set<Class<?>> excludedActivityClasses = new HashSet<>();
 
         public Builder setLoggingEnabled(boolean loggingEnabled) {
             this.loggingEnabled = loggingEnabled;
@@ -94,6 +103,15 @@ public final class LoggerConfig {
         /** Shows a draggable in-app debug bubble (Start/Stop Logging, View Logs, Clear Logs) as soon as init() runs. */
         public Builder setFloatingBubbleEnabled(boolean floatingBubbleEnabled) {
             this.floatingBubbleEnabled = floatingBubbleEnabled;
+            return this;
+        }
+
+        /**
+         * Activities the debug bubble should never attach to — e.g. a third-party SDK screen
+         * whose theme doesn't extend AppCompat/MaterialComponents.
+         */
+        public Builder setExcludedActivityClasses(Class<?>... activityClasses) {
+            this.excludedActivityClasses = new HashSet<>(Arrays.asList(activityClasses));
             return this;
         }
 
